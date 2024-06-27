@@ -11,3 +11,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+jwt:
+  secret-key:
+
+oauth:
+  kakao:
+    client-id:
+    url:
+      auth:
+      api:
