@@ -21,7 +21,7 @@ public class OauthTestController {
     @Value("${oauth.kakao.client-id}")
     private String CLIENT_ID;
 
-    @Value("${oauth.kakao.url}")
+    @Value("${oauth.kakao.redirect-url}")
     private String REDIRECT_URL;
 
     @GetMapping("/page")

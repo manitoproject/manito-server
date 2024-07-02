@@ -3,8 +3,8 @@ spring:
     name: manito-server
 
   datasource:
-    url: jdbc:mysql://localhost:3306/manito?serverTimezone=Asia/Seoul
-    username: root
+    url: ENC(Ykln/OQN9Ee6lH6GBBOJMM4E/qOlUZDMJfV6pkzOitFlT8M72W8kQpi6Z0CycqxYwx4SH4vWk5LbpceUGLYpd+jxyxBQLDjO+m/ENUPnNcSNJIO3TDbBneVCfYE2kM2D)
+    username: ENC(4EbGhPmLdxUVidIz7O1OCCjI3K4qYain4s+0ADGO89s5RpuJ00X3mpK+n0zvgyyw)
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -12,12 +12,18 @@ spring:
     hibernate:
       ddl-auto: create
 
+jasypt:
+  encryptor:
+    bean: jasyptEncryptor
+
 jwt:
-  secret-key:
+  secret-key: ENC(FBsVl8Grp/ltSVNfgIPjx2NtZoeG4158QuONnN3UsN0o5ppKdXpfgLlTH9pGT0ysxrvr3PVt0UCek+Aj7qliyPlzPMSQt57/hiKuHowaivo=)
+  access-token:
+    expiration-seconds: 86400 #1일
+  refresh-token:
+    expiration-seconds: 604800 #7일
 
 oauth:
   kakao:
-    client-id:
-    url:
-      auth:
-      api:
+    client-id: ENC(SCXx5pYDJjMxgIJjuvzLD2z3xdj+vuY+7B/5d+uCLQTXGskjzI/fD/CiI6hEXylmERN/0x3CSx8O/3+/O+QsJK5hUzW9vmx26nTYBMK31/s=)
+    redirect-url: ENC(2HlKdJBmY2/v03OmqSo3v/Bpi+3quMPr9Ywh7Qb7Y4+WsAb1PNVpjX0OSE5G/uHzdveYESFqEpxm8EtIxbNqJAU32ELMPivmyDEkaaz1emkTW9j/iqwW+AJvV0x6/T4a)
