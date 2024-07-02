@@ -1,6 +1,5 @@
 package manito.server.auth;
 
-import io.netty.util.internal.StringUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -8,7 +7,6 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
@@ -30,6 +28,7 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         logger.info("[JwtFilter] : " + httpServletRequest.getRequestURL().toString());
         String jwt = resolveToken(httpServletRequest);
+        System.out.println("jwt = " + jwt);
 
         if (StringUtils.hasText(jwt) && jwtTokenService.validateToken(jwt)) {
             //토큰 Payload에 있는 userId 가져오기

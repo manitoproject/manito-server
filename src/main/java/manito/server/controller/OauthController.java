@@ -5,9 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import manito.server.dto.OAuthRequestDto;
+import lombok.RequiredArgsConstructor;
+import manito.server.auth.OauthService;
+import manito.server.dto.AccessTokenRequestDto;
 import manito.server.dto.OAuthResponseDto;
 import manito.server.dto.RefreshTokenResponseDto;
+import manito.server.exception.CustomException;
+import manito.server.exception.ErrorCode;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login/oauth")
-public class OAuthController {
+@RequiredArgsConstructor
+public class OauthController {
+    private final OauthService oauthService;
+
     @PostMapping("/kakao")
-    public OAuthResponseDto kakao(HttpServletResponse response, @RequestBody OAuthRequestDto request) {
-        String accessToken = oauthService.kakaoLogin(request.getAccessToken(), response);
+    public OAuthResponseDto kakao(HttpServletResponse response,@RequestBody AccessTokenRequestDto requestBody) {
+        System.out.println("<<< OauthController>> code = " + requestBody.getCode());
+
+        String accessToken = oauthService.loginWithKakao(requestBody.getCode(), response);
 
         OAuthResponseDto oAuthResponseDto = new OAuthResponseDto(accessToken);
 
@@ -36,7 +45,7 @@ public class OAuthController {
                 Collectors.toList()).get(0);
 
         if (refreshTokenCookie == null)
-            throw new CumtomException(ErrorCode.INVALID_REFRESH_TOKEN);
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
 
         String accessToken = oauthService.refreshAccessToken(refreshTokenCookie.getValue());
         refreshTokenResponseDto.setAccessToken(accessToken);

@@ -2,7 +2,6 @@ package manito.server.controller;
 
 import lombok.RequiredArgsConstructor;
 import manito.server.auth.SecurityUtil;
-import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;

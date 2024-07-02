@@ -7,7 +7,6 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;

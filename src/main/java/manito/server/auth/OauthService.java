@@ -2,7 +2,6 @@ package manito.server.auth;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
@@ -17,8 +16,10 @@ public class OauthService {
     private final KakaoOauthService kakaoOauthService;
 
     //카카오 로그인
-    public String loginWithKakao(String accessToken, HttpServletResponse response) {
-        User user = kakaoOauthService.getUserProfileByToken(accessToken);
+    public String loginWithKakao(String code, HttpServletResponse response) {
+        System.out.println("<<< OauthService >>> accessToken = " + code);
+        User user = kakaoOauthService.getUserProfileByToken(code);
+
         return getTokens(user.getId(), response);
     }
 
