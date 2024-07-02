@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
+import manito.server.service.JwtTokenService;
 import manito.server.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,16 @@ public class JwtFilter extends GenericFilterBean {
     private final JwtTokenService jwtTokenService;
     private final UserService userService;
 
+    /**
+     * 이 필터에서 엑세스 토큰이 유효한지 확인한 후 SecurityContext에 계정정보 저장
+     * @param servletRequest  The request to process
+     * @param servletResponse The response associated with the request
+     * @param filterChain    Provides access to the next filter in the chain for this filter to pass the request and response
+     *                     to for further processing
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
@@ -46,6 +57,11 @@ public class JwtFilter extends GenericFilterBean {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    /**
+     * 헤더에서 엑세스 토큰 가져오기
+     * @param request
+     * @return
+     */
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 

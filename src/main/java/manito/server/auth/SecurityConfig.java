@@ -3,6 +3,7 @@ package manito.server.auth;
 import lombok.RequiredArgsConstructor;
 import manito.server.enums.UserRole;
 import manito.server.exception.ExceptionHandlerFilter;
+import manito.server.service.JwtTokenService;
 import manito.server.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

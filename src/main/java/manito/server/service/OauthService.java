@@ -1,11 +1,10 @@
-package manito.server.auth;
+package manito.server.service;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
-import manito.server.service.UserService;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor

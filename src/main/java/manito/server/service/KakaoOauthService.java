@@ -1,4 +1,4 @@
-package manito.server.auth;
+package manito.server.service;
 
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,6 @@ import manito.server.dto.KakaoTokenResponseDto;
 import manito.server.dto.KakaoUserInfoResponseDto;
 import manito.server.entity.User;
 import manito.server.repository.UserRepository;
-import manito.server.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import manito.server.auth.OauthService;
+import manito.server.service.OauthService;
 import manito.server.dto.AccessTokenRequestDto;
 import manito.server.dto.OAuthResponseDto;
 import manito.server.dto.RefreshTokenResponseDto;

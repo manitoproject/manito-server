@@ -1,7 +1,7 @@
 package manito.server.controller;
 
 import lombok.RequiredArgsConstructor;
-import manito.server.auth.KakaoOauthService;
+import manito.server.service.KakaoOauthService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

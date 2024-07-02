@@ -1,4 +1,4 @@
-package manito.server.auth;
+package manito.server.service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
