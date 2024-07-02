@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import manito.server.dto.UserDto;
+import manito.server.entity.User;
 import manito.server.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +24,7 @@ public class UserPrincipal implements UserDetails {
     @Setter
     private Map<String, Object> attributes;
 
-    public static UserPrincipal create(UserDto user) {
+    public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(UserRole.USER.getRole()));
 
         return new UserPrincipal(

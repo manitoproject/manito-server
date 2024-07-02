@@ -3,6 +3,7 @@ package manito.server.auth;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import manito.server.dto.UserDto;
+import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
 import manito.server.service.UserService;
@@ -17,8 +18,8 @@ public class OauthService {
 
     //카카오 로그인
     public String loginWithKakao(String accessToken, HttpServletResponse response) {
-        UserDto userDto = kakaoOauthService.getUserProfileByToken(accessToken);
-        return getTokens(userDto.getId(), response);
+        User user = kakaoOauthService.getUserProfileByToken(accessToken);
+        return getTokens(user.getId(), response);
     }
 
     //액세스토큰, 리프레시토큰 생성
@@ -26,9 +27,9 @@ public class OauthService {
         final String accessToken = jwtTokenService.createAccessToken(id.toString());
         final String refreshToken = jwtTokenService.createRefreshToken();
 
-        UserDto userDto = userService.findById(id);
-        userDto.setRefreshToken(refreshToken);
-        userService.updateRefreshToken(userDto);
+        User user = userService.getUser(id);
+        user.setRefreshToken(refreshToken);
+        userService.updateRefreshToken(user);
 
         jwtTokenService.addRefreshTokenToCookie(refreshToken, response);
         return accessToken;
@@ -36,8 +37,8 @@ public class OauthService {
 
     // 리프레시 토큰으로 액세스토큰 새로 갱신
     public String refreshAccessToken(String refreshToken) {
-        UserDto userDto = userService.findByRefreshToken(refreshToken);
-        if(userDto == null) {
+        User user = userService.getUser(refreshToken);
+        if(user == null) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
@@ -45,6 +46,6 @@ public class OauthService {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        return jwtTokenService.createAccessToken(userDto.getId().toString());
+        return jwtTokenService.createAccessToken(user.getId().toString());
     }
 }

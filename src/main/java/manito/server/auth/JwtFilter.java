@@ -7,9 +7,9 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.attribute.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import manito.server.dto.UserDto;
+import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
 import manito.server.service.UserService;
@@ -34,7 +34,7 @@ public class JwtFilter extends GenericFilterBean {
         if (StringUtils.hasText(jwt) && jwtTokenService.validateToken(jwt)) {
             //토큰 Payload에 있는 userId 가져오기
             Long userId = Long.valueOf(jwtTokenService.getPayload(jwt));
-            UserDto user = userService.findById(userId);
+            User user = userService.getUser(userId);
             if (user == null)
                 throw new CustomException(ErrorCode.NOT_EXIST_USER);
             UserDetails userDetails = UserPrincipal.create(user);
