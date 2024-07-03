@@ -16,14 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    // 유저정보 조회 API
+    //todo: 왜 403 forbidden 에러 뜨는지?
+    /**
+     * 유저정보 조회 API
+     * @return
+     */
     @GetMapping("/info")
     public User info() {
         final long userId = SecurityUtil.getCurrentUserId();
+
         User user = userService.getUser(userId);
-        if(user == null) {
+
+        System.out.println("user = " + user);
+
+        if(user == null)
             throw new CustomException(ErrorCode.NOT_EXIST_USER);
-        }
+
         return user;
     }
 }

@@ -1,6 +1,7 @@
 package manito.server.service;
 
 import io.netty.handler.codec.http.HttpHeaderValues;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.dto.KakaoTokenResponseDto;
@@ -27,7 +28,7 @@ public class KakaoOauthService {
     private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
     private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
 
-    public String getAccessTokenFromKakao(String code) {
+    public String getKakaoToken(String code) {
         KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
@@ -55,32 +56,12 @@ public class KakaoOauthService {
         return kakaoTokenResponseDto.getAccessToken();
     }
 
-    public KakaoUserInfoResponseDto getUserInfo(String accessToken) {
-
-        KakaoUserInfoResponseDto userInfo = WebClient.create(KAUTH_USER_URL_HOST)
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-                        .path("/v2/user/me")
-                        .build(true))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken) // access token 인가
-                .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
-                .retrieve()
-                //TODO : Custom Exception
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
-                .bodyToMono(KakaoUserInfoResponseDto.class)
-                .block();
-
-        log.info("[ Kakao Service ] Auth ID ---> {} ", userInfo.getId());
-        log.info("[ Kakao Service ] NickName ---> {} ", userInfo.getKakaoAccount().getProfile().getNickName());
-        log.info("[ Kakao Service ] ProfileImageUrl ---> {} ", userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
-
-        return userInfo;
-    }
-
-    // 카카오Api 호출해서 AccessToken으로 유저정보 가져오기
-    public KakaoUserInfoResponseDto getUserAttributesByToken(String accessToken){
+    /**
+     * 카카오Api 호출해서 Token으로 유저정보 가져오기
+     * @param accessToken
+     * @return
+     */
+    public KakaoUserInfoResponseDto getKakaoUserInfo(String accessToken){
 
         System.out.println("<<< KakaoOauthService >>> accessToken = " + accessToken);
         KakaoUserInfoResponseDto userInfo = WebClient.create(KAUTH_USER_URL_HOST)
@@ -98,24 +79,32 @@ public class KakaoOauthService {
                 .bodyToMono(KakaoUserInfoResponseDto.class)
                 .block();
 
-        log.info("[ Kakao Service ] Auth ID ---> {} ", userInfo.getId());
-        log.info("[ Kakao Service ] NickName ---> {} ", userInfo.getKakaoAccount().getProfile().getNickName());
-        log.info("[ Kakao Service ] ProfileImageUrl ---> {} ", userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+        log.info("<<< KakaoOauthService >>> getKakaoUserInfo : {}", userInfo.toString());
+//        log.info("[ Kakao Service ] Auth ID ---> {} ", userInfo.getId());
+//        log.info("[ Kakao Service ] NickName ---> {} ", userInfo.getKakaoAccount().getProfile().getNickName());
+//        log.info("[ Kakao Service ] ProfileImageUrl ---> {} ", userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
 
         return userInfo;
     }
 
-    // 카카오API에서 가져온 유저정보를 DB에 저장
-    public User getUserProfileByToken(String code){
-        String accessToken = getAccessTokenFromKakao(code);
-        KakaoUserInfoResponseDto userInfo = getUserAttributesByToken(accessToken);
+    /**
+     * 카카오 API에서 가져온 유저정보를 DB에 저장
+     * @param code
+     * @return
+     */
+    public User saveUser(String code){
+        String token = getKakaoToken(code);
+        KakaoUserInfoResponseDto kakaoUser = getKakaoUserInfo(token);
 
 //        KakaoInfoDto kakaoInfoDto = new KakaoInfoDto(userAttributesByToken);
 
         User user = User.builder()
-                .id(userInfo.getId())
-                .email(userInfo.kakaoAccount.getEmail())
-                .platform("KAKAO")
+                .id(kakaoUser.getId())
+                .email(kakaoUser.getKakaoAccount().getEmail())
+                .nickname(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .provider("KAKAO")
+                .regDate(LocalDateTime.now())
                 .build();
 
         userRepository.save(user);

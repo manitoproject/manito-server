@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -16,16 +17,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class User {
     @Id
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    private String platform;
+    @Column(nullable = false)
+    private String nickname;
+
+    private String originName;
+
+    private String provider;
 
     private String refreshToken;
 
+    @Column(nullable = false)
     private LocalDateTime regDate;
 }

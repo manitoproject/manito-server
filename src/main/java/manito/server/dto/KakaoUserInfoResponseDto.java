@@ -6,12 +6,13 @@ import java.util.Date;
 import java.util.HashMap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor //역직렬화를 위한 기본 생성자
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class KakaoUserInfoResponseDto {
-
     //회원 번호
     @JsonProperty("id")
     public Long id;
@@ -44,6 +45,7 @@ public class KakaoUserInfoResponseDto {
     @Getter
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @ToString
     public class KakaoAccount {
 
         //프로필 정보 제공 동의 여부
@@ -150,6 +152,7 @@ public class KakaoUserInfoResponseDto {
         @Getter
         @NoArgsConstructor
         @JsonIgnoreProperties(ignoreUnknown = true)
+        @ToString
         public class Profile {
 
             //닉네임
@@ -180,6 +183,7 @@ public class KakaoUserInfoResponseDto {
     @Getter
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @ToString
     public class Partner {
         //고유 ID
         @JsonProperty("uuid")

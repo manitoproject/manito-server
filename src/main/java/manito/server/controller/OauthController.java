@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import manito.server.service.OauthService;
 import manito.server.dto.AccessTokenRequestDto;
-import manito.server.dto.OAuthResponseDto;
+import manito.server.dto.AccessTokenResponseDto;
 import manito.server.dto.RefreshTokenResponseDto;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
@@ -24,12 +24,12 @@ public class OauthController {
     private final OauthService oauthService;
 
     @PostMapping("/kakao")
-    public OAuthResponseDto kakao(HttpServletResponse response,@RequestBody AccessTokenRequestDto requestBody) {
+    public AccessTokenResponseDto kakao(HttpServletResponse response, @RequestBody AccessTokenRequestDto requestBody) {
         System.out.println("<<< OauthController>> code = " + requestBody.getCode());
 
         String accessToken = oauthService.loginWithKakao(requestBody.getCode(), response);
 
-        OAuthResponseDto oAuthResponseDto = new OAuthResponseDto(accessToken);
+        AccessTokenResponseDto oAuthResponseDto = new AccessTokenResponseDto(accessToken);
 
         return oAuthResponseDto;
     }
