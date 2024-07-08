@@ -3,9 +3,9 @@ spring:
     name: manito-server
 
   datasource:
-    url: ENC(Ykln/OQN9Ee6lH6GBBOJMM4E/qOlUZDMJfV6pkzOitFlT8M72W8kQpi6Z0CycqxYwx4SH4vWk5LbpceUGLYpd+jxyxBQLDjO+m/ENUPnNcSNJIO3TDbBneVCfYE2kM2D)
-    username: ENC(4EbGhPmLdxUVidIz7O1OCCjI3K4qYain4s+0ADGO89s5RpuJ00X3mpK+n0zvgyyw)
-    password:
+    url: ENC(HdNhdC5xTKlFn8h1+VaJwgRRG01t16bzHVOeX58NDwsTfL0ubiE2YIg5hkoS4UKg2RPOeIDa4gHaW0BycblL3seIjVTuL3MxZ0JcFIZ+pxuJGV1ZlGpqvlh92GoTcLCv)
+    username: ENC(+O3FJaHZ0oMs3b65pJWlw0amfnJjSpj+VwRk+RmZ7fX/BhMGRt9U/CwzkELiY8LS)
+    password: ENC(2KASpL3OVLDE/D9SZu220U5VRbXQmFAoeJuXjxveOvZAWxJjpfPsdJp6kREkFwt6)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -17,7 +17,7 @@ jasypt:
     bean: jasyptEncryptor
 
 jwt:
-  secret-key: ENC(FBsVl8Grp/ltSVNfgIPjx2NtZoeG4158QuONnN3UsN0o5ppKdXpfgLlTH9pGT0ysxrvr3PVt0UCek+Aj7qliyPlzPMSQt57/hiKuHowaivo=)
+  secret-key: ENC(K5Ul43Ii9wg2hVUfUvULJriTnN/KzRIw/j23vJrmJ4r5j/8TOyJDdBVZ6dARircAmKaGG9Msvhqw5MbRi9gUfjLYCqLV+HUE7vJpOI0WWpc=)
   access-token:
     expiration-seconds: 86400 #1일
   refresh-token:
@@ -25,5 +25,5 @@ jwt:
 
 oauth:
   kakao:
-    client-id: ENC(SCXx5pYDJjMxgIJjuvzLD2z3xdj+vuY+7B/5d+uCLQTXGskjzI/fD/CiI6hEXylmERN/0x3CSx8O/3+/O+QsJK5hUzW9vmx26nTYBMK31/s=)
-    redirect-url: ENC(2HlKdJBmY2/v03OmqSo3v/Bpi+3quMPr9Ywh7Qb7Y4+WsAb1PNVpjX0OSE5G/uHzdveYESFqEpxm8EtIxbNqJAU32ELMPivmyDEkaaz1emkTW9j/iqwW+AJvV0x6/T4a)
+    client-id: ENC(ryNisESR51pLpLIek6sTNlxiwPY1Pnrqn22DBlbf8AjSa6oNHjxqOhuCUMuwo/HEngjUQf14XbPDnDumb/jTeCQvKT0z7uhZjcSmsEa23Uk=)
+    redirect-url: ENC(vA5VCJSJCekDM59s/ZW7NRaTB7kAHI3sGy5bgP6kcQ/3021wUpDczyKo2xB2HzDQaYWjRKssLFwDqbTbPrz7EHETgBOs4OKz5WY+5YZz4xRBYs3nE0PrHH81OGxNavUW)
