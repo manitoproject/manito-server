@@ -17,7 +17,6 @@ public class UserController {
     private final UserService userService;
     private final HttpServletUtil httpServletUtil;
 
-    //todo: 왜 403 forbidden 에러 뜨는지?
     /**
      * 유저정보 조회 API
      * @return
