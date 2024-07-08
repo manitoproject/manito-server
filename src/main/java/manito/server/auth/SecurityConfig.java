@@ -1,7 +1,6 @@
 package manito.server.auth;
 
 import lombok.RequiredArgsConstructor;
-import manito.server.enums.UserRole;
 import manito.server.exception.ExceptionHandlerFilter;
 import manito.server.service.JwtTokenService;
 import manito.server.service.UserService;
@@ -28,7 +27,7 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/login/**").permitAll()
-                        .requestMatchers("/user/**").hasAuthority(UserRole.USER.getRole())
+//                        .requestMatchers("/user/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
