@@ -26,9 +26,11 @@ public class UserService {
     }
 
     public User getUser(String refreshToken) {
-        User user = userRepository.findByRefreshToken(refreshToken);
+        Optional<User> user = userRepository.findByRefreshToken(refreshToken);
+        if (user.isEmpty())
+            return null;
 
-        return user;
+        return user.get();
     }
 
     public void update(User user) {
@@ -64,10 +66,8 @@ public class UserService {
 
         userRepository.saveAndFlush(user);
 
-        ResponseDto responseDto = ResponseDto.builder()
+        return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
                 .build();
-
-        return responseDto;
     }
 }
