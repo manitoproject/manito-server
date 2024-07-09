@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 @Service
 public class HttpServletUtil {
-    public RequestHeaderDto getRequestHeaderDto(HttpServletRequest request) {
+    public static RequestHeaderDto getRequestHeaderDto(HttpServletRequest request) {
         String authorizationTemp = (StringUtils.hasLength(request.getHeader("authorization"))) ? request.getHeader("authorization") : null;
         String authorization;
 
@@ -32,7 +32,7 @@ public class HttpServletUtil {
                 .build();
     }
 
-    public String getRreshToken(HttpServletRequest request) {
+    public static String getRreshToken(HttpServletRequest request) {
         Cookie[] list = request.getCookies();
         if (list == null)
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);

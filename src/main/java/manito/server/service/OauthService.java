@@ -18,7 +18,6 @@ public class OauthService {
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
     private final KakaoOauthService kakaoOauthService;
-    private final HttpServletUtil httpServletUtil;
 
     //카카오 로그인
     public ResponseDto<AccessTokenResponseDto> loginWithKakao(HttpServletResponse response, AccessTokenRequestDto requestBody) {
@@ -44,7 +43,7 @@ public class OauthService {
         final String refreshToken = jwtTokenService.createRefreshToken();
 
         User user = userService.getUser(id);
-        user.setRefreshToken(refreshToken);
+        user.updateRefreshToken(refreshToken);
         userService.updateRefreshToken(user);
 
         jwtTokenService.addRefreshTokenToCookie(refreshToken, response);
@@ -53,7 +52,7 @@ public class OauthService {
 
     // 리프레시 토큰으로 액세스토큰 새로 갱신
     public ResponseDto<AccessTokenResponseDto> refreshAccessToken(HttpServletRequest request) {
-        String refreshToken = httpServletUtil.getRreshToken(request);
+        String refreshToken = HttpServletUtil.getRreshToken(request);
 
         User user = userService.getUser(refreshToken);
 
