@@ -21,8 +21,8 @@ public class UserController {
      * 유저정보 조회 API
      * @return
      */
-    @PostMapping ("/info")
-    public ResponseEntity info(HttpServletRequest requestHeader) {
+    @PostMapping("/info")
+    public ResponseEntity<?> info(HttpServletRequest requestHeader) {
         return new ResponseEntity<>(userService.getCurrentUserInfo(), HttpStatus.OK);
     }
 }

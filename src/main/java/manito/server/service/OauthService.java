@@ -1,18 +1,15 @@
 package manito.server.service;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import manito.server.dto.AccessTokenRequestDto;
 import manito.server.dto.AccessTokenResponseDto;
-import manito.server.dto.RefreshTokenResponseDto;
 import manito.server.dto.ResponseDto;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
+import manito.server.util.HttpServletUtil;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -21,6 +18,7 @@ public class OauthService {
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
     private final KakaoOauthService kakaoOauthService;
+    private final HttpServletUtil httpServletUtil;
 
     //카카오 로그인
     public ResponseDto<AccessTokenResponseDto> loginWithKakao(HttpServletResponse response, AccessTokenRequestDto requestBody) {
@@ -54,26 +52,16 @@ public class OauthService {
     }
 
     // 리프레시 토큰으로 액세스토큰 새로 갱신
-    public ResponseDto<AccessTokenResponseDto> refreshAccessToken(HttpServletRequest request, String refreshToken) {
-        RefreshTokenResponseDto refreshTokenResponseDto = new RefreshTokenResponseDto();
-        Cookie[] list = request.getCookies();
-        if (list == null)
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-
-        Cookie refreshTokenCookie = Arrays.stream(list).filter(cookie -> cookie.getName().equals("refresh_token")).collect(
-                Collectors.toList()).get(0);
-
-        if (refreshTokenCookie == null)
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+    public ResponseDto<AccessTokenResponseDto> refreshAccessToken(HttpServletRequest request) {
+        String refreshToken = httpServletUtil.getRreshToken(request);
 
         User user = userService.getUser(refreshToken);
-        if(user == null) {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
 
-        if(!jwtTokenService.validateToken(refreshToken)) {
+        if(user == null)
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
+
+        if(!jwtTokenService.validateToken(refreshToken))
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
 
         String token = jwtTokenService.createAccessToken(user.getId().toString());
 

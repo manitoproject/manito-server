@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Deprecated
 public class RefreshTokenResponseDto {
     private String accessToken;
 }
