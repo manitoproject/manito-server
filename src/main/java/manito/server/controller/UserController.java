@@ -1,8 +1,10 @@
 package manito.server.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import manito.server.dto.NicknameRequestDto;
 import manito.server.service.UserService;
+import manito.server.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +23,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/info")
-    public ResponseEntity<?> info() {
-        return new ResponseEntity<>(userService.getCurrentUserInfo(), HttpStatus.OK);
+    public ResponseEntity<?> info(HttpServletRequest request) {
+        return new ResponseEntity<>(userService.getCurrentUserInfo(HttpServletUtil.getRequestHeaderDto(request)), HttpStatus.OK);
     }
 
     @PostMapping("/nickname")
-    public ResponseEntity<?> nickname(@RequestBody NicknameRequestDto requestBody) {
-        return new ResponseEntity<>(userService.changeNickname(requestBody), HttpStatus.OK);
+    public ResponseEntity<?> nickname(HttpServletRequest request, @RequestBody NicknameRequestDto requestBody) {
+        return new ResponseEntity<>(userService.changeNickname(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
     }
 }
