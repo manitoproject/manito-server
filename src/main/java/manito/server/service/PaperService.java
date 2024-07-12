@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.auth.SecurityUtil;
 import manito.server.dto.PaperDto;
-import manito.server.dto.PaperListDto;
 import manito.server.dto.RequestHeaderDto;
 import manito.server.dto.ResponseDto;
 import manito.server.entity.Paper;
@@ -55,12 +54,11 @@ public class PaperService {
 
     public ResponseDto<?> readList(RequestHeaderDto requestHeader, Long userId) {
         log.info("{}|PaperService.readList", SecurityUtil.getCurrentUserId());
-        PaperListDto response = new PaperListDto();
+        List<PaperDto> paperDtoList = new ArrayList<>();
 
         try {
             User user = userService.getUser(userId);
             List<Paper> paperList = paperRepository.findByUser(user);
-            List<PaperDto> paperDtoList = new ArrayList<>();
             for (Paper paper : paperList) {
                 PaperDto paperDto = PaperDto.builder()
                         .id(paper.getId())
@@ -73,8 +71,6 @@ public class PaperService {
 
                 paperDtoList.add(paperDto);
             }
-
-            response.setData(paperDtoList);
         } catch (Exception e) {
             log.error("{}|PaperService.readList|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
             return ResponseDto.builder()
@@ -85,7 +81,7 @@ public class PaperService {
 
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
-                .data(response)
+                .data(paperDtoList)
                 .build();
     }
 
