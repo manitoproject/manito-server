@@ -7,6 +7,7 @@ import manito.server.service.PaperService;
 import manito.server.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,10 @@ public class PaperController {
     public ResponseEntity<?> update(HttpServletRequest request, @RequestBody PaperDto requestBody) {
         return new ResponseEntity<>(paperService.update(HttpServletUtil.getRequestHeaderDto(request), requestBody),
                 HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(HttpServletRequest request, @RequestBody PaperDto requestBody) {
+        return new ResponseEntity<>(paperService.delete(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
     }
 }

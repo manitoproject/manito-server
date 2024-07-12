@@ -114,4 +114,22 @@ public class PaperService {
                 .result(AppUtil.RESULT_SUCCESS)
                 .build();
     }
+
+    public ResponseDto<?> delete(RequestHeaderDto requestHeader, PaperDto requestBody) {
+        log.info("{}|PaperService.delete|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
+
+        try {
+            paperRepository.deleteById(requestBody.getId());
+        } catch (Exception e) {
+            log.error("{}|PaperService.delete|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .build();
+    }
 }
