@@ -42,4 +42,11 @@ public class Paper {
     private LocalDateTime regDateTime;
 
     private LocalDateTime modDateTime;
+
+    public void update(String category, String title, String theme, LocalDateTime nowDateTime) {
+        this.category = category;
+        this.title = title;
+        this.theme = theme;
+        this.modDateTime = nowDateTime;
+    }
 }

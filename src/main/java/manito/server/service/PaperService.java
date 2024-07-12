@@ -3,6 +3,7 @@ package manito.server.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.auth.SecurityUtil;
@@ -52,9 +53,8 @@ public class PaperService {
                 .build();
     }
 
-    public ResponseDto<?> getPaperList(RequestHeaderDto requestHeader, Long userId) {
-        log.info("{}|PaperService.getPaperList", SecurityUtil.getCurrentUserId());
-
+    public ResponseDto<?> readList(RequestHeaderDto requestHeader, Long userId) {
+        log.info("{}|PaperService.readList", SecurityUtil.getCurrentUserId());
         PaperListDto response = new PaperListDto();
 
         try {
@@ -76,7 +76,7 @@ public class PaperService {
 
             response.setData(paperDtoList);
         } catch (Exception e) {
-            log.error("{}|PaperService.getPaperList|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            log.error("{}|PaperService.readList|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
             return ResponseDto.builder()
                     .result(AppUtil.RESULT_FAIL)
                     .description(e.getMessage())
@@ -86,6 +86,32 @@ public class PaperService {
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
                 .data(response)
+                .build();
+    }
+
+    public ResponseDto<?> update(RequestHeaderDto requestHeader, PaperDto requestBody) {
+        log.info("{}|PaperService.update|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
+
+        try {
+            Optional<Paper> optionalPaper = paperRepository.findById(requestBody.getId());
+            if (optionalPaper.isEmpty())
+                throw new NullPointerException();
+
+            Paper paper = optionalPaper.get();
+
+            paper.update(requestBody.getCategory(), requestBody.getTitle(), requestBody.getTheme(), LocalDateTime.now());
+
+            paperRepository.saveAndFlush(paper);
+        } catch (Exception e) {
+            log.error("{}|PaperService.update|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
                 .build();
     }
 }
