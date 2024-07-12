@@ -20,6 +20,9 @@ public class PaperDto {
     private Long id;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long userId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String category;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

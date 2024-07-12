@@ -1,10 +1,13 @@
 package manito.server.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.auth.SecurityUtil;
 import manito.server.dto.PaperDto;
+import manito.server.dto.PaperListDto;
 import manito.server.dto.RequestHeaderDto;
 import manito.server.dto.ResponseDto;
 import manito.server.entity.Paper;
@@ -21,7 +24,7 @@ public class PaperService {
     private final PaperRepository paperRepository;
 
     public ResponseDto<?> create(RequestHeaderDto requestHeader, PaperDto requestBody) {
-        log.info("{}", requestBody);
+        log.info("{}|PaperService.create|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
         try {
             User user = userService.getUser(SecurityUtil.getCurrentUserId());
@@ -46,6 +49,43 @@ public class PaperService {
 
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
+                .build();
+    }
+
+    public ResponseDto<?> getPaperList(RequestHeaderDto requestHeader, Long userId) {
+        log.info("{}|PaperService.getPaperList", SecurityUtil.getCurrentUserId());
+
+        PaperListDto response = new PaperListDto();
+
+        try {
+            User user = userService.getUser(userId);
+            List<Paper> paperList = paperRepository.findByUser(user);
+            List<PaperDto> paperDtoList = new ArrayList<>();
+            for (Paper paper : paperList) {
+                PaperDto paperDto = PaperDto.builder()
+                        .id(paper.getId())
+                        .category(paper.getCategory())
+                        .title(paper.getTitle())
+                        .theme(paper.getTheme())
+                        .regDateTime(paper.getRegDateTime())
+                        .modDateTime(paper.getModDateTime())
+                        .build();
+
+                paperDtoList.add(paperDto);
+            }
+
+            response.setData(paperDtoList);
+        } catch (Exception e) {
+            log.error("{}|PaperService.getPaperList|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .data(response)
                 .build();
     }
 }
