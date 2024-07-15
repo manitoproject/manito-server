@@ -44,4 +44,13 @@ public class Message {
 
     @ColumnDefault("'Y'")
     private String isPublic;
+
+    public void update(String theme, String content, LocalDateTime modDateTime, String font, String fontColor, String isPublic) {
+        this.theme = theme;
+        this.content = content;
+        this.modDateTime = modDateTime;
+        this.font = font;
+        this.fontColor = fontColor;
+        this.isPublic = isPublic;
+    }
 }

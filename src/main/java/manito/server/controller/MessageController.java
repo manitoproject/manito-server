@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,5 +45,16 @@ public class MessageController {
     @GetMapping("/paper/{paperId}")
     public ResponseEntity<?> read(HttpServletRequest request, @PathVariable("paperId") Long paperId) {
         return new ResponseEntity<>(messageService.read(HttpServletUtil.getRequestHeaderDto(request), paperId), HttpStatus.OK);
+    }
+
+    /**
+     * 메세지 수정
+     * @param request
+     * @param requestBody
+     * @return
+     */
+    @PutMapping
+    public ResponseEntity<?> update(HttpServletRequest request, @RequestBody MessageDto requestBody) {
+        return new ResponseEntity<>(messageService.update(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
     }
 }
