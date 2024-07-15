@@ -99,4 +99,46 @@ public class MessageService {
                 .data(messageDtoList)
                 .build();
     }
+
+    public ResponseDto<?> read(RequestHeaderDto requestHeader, Long paperId) {
+        log.info("{}|MessageService.read|requestBody: {}", SecurityUtil.getCurrentUserId(), paperId);
+        List<MessageDto> messageDtoList = new ArrayList<>();
+
+        try {
+            User user = userService.getUser(SecurityUtil.getCurrentUserId());
+            Optional<Paper> optionalPaper = paperRepository.findById(paperId);
+            if (optionalPaper.isEmpty())
+                throw new RuntimeException();
+            Paper paper = optionalPaper.get();
+
+            List<Message> messageList = messageRepository.findByPaper(paper);
+            for (Message message : messageList) {
+                MessageDto messageDto = MessageDto.builder()
+                        .id(message.getId())
+                        .paperId(message.getPaper().getId())
+                        .userId(message.getUser().getId())
+                        .theme(message.getTheme())
+                        .content(message.getContent())
+                        .regDateTime(message.getRegDateTime())
+                        .modDateTime(message.getModDateTime())
+                        .font(message.getFont())
+                        .fontColor(message.getFontColor())
+                        .isPublic(message.getIsPublic())
+                        .build();
+
+                messageDtoList.add(messageDto);
+            }
+        } catch (Exception e) {
+            log.error("{}|MessageService.read|requsetBody = {}|error = {}", SecurityUtil.getCurrentUserId(), paperId, e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .data(messageDtoList)
+                .build();
+    }
 }
