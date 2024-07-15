@@ -1,6 +1,8 @@
 package manito.server.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +50,7 @@ public class MessageService {
             messageRepository.saveAndFlush(message);
 
         } catch (Exception e) {
-            log.error("{}|PaperService.create|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            log.error("{}|MessageService.create|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
             return ResponseDto.builder()
                     .result(AppUtil.RESULT_FAIL)
                     .description(e.getMessage())
@@ -57,6 +59,44 @@ public class MessageService {
 
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
+                .build();
+    }
+
+    public ResponseDto<?> read(RequestHeaderDto requestHeader) {
+        log.info("{}|MessageService.read", SecurityUtil.getCurrentUserId());
+        List<MessageDto> messageDtoList = new ArrayList<>();
+
+        try {
+            User user = userService.getUser(SecurityUtil.getCurrentUserId());
+
+            List<Message> messageList = messageRepository.findByUser(user);
+            for (Message message : messageList) {
+                MessageDto messageDto = MessageDto.builder()
+                        .id(message.getId())
+                        .paperId(message.getPaper().getId())
+                        .userId(message.getUser().getId())
+                        .theme(message.getTheme())
+                        .content(message.getContent())
+                        .regDateTime(message.getRegDateTime())
+                        .modDateTime(message.getModDateTime())
+                        .font(message.getFont())
+                        .fontColor(message.getFontColor())
+                        .isPublic(message.getIsPublic())
+                        .build();
+
+                messageDtoList.add(messageDto);
+            }
+        } catch (Exception e) {
+            log.error("{}|MessageService.read|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .data(messageDtoList)
                 .build();
     }
 }
