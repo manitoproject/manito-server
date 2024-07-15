@@ -7,6 +7,7 @@ import manito.server.service.MessageService;
 import manito.server.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,5 +57,10 @@ public class MessageController {
     @PutMapping
     public ResponseEntity<?> update(HttpServletRequest request, @RequestBody MessageDto requestBody) {
         return new ResponseEntity<>(messageService.update(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(HttpServletRequest request, @RequestBody MessageDto requestBody) {
+        return new ResponseEntity<>(messageService.delete(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
     }
 }

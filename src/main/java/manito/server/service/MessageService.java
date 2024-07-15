@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class MessageService {
-    private final MessageRepository messageRepository;
     private final UserService userService;
+    private final MessageRepository messageRepository;
     private final PaperRepository paperRepository;
 
     public ResponseDto<?> create(RequestHeaderDto requestHeader, MessageDto requestBody) {
@@ -167,13 +167,13 @@ public class MessageService {
                 .build();
     }
 
-    /*public ResponseDto<?> delete(RequestHeaderDto requestHeader, PaperDto requestBody) {
-        log.info("{}|PaperService.delete|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
+    public ResponseDto<?> delete(RequestHeaderDto requestHeader, MessageDto requestBody) {
+        log.info("{}|MessageService.delete|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
         try {
-            paperRepository.deleteById(requestBody.getId());
+            messageRepository.deleteById(requestBody.getId());
         } catch (Exception e) {
-            log.error("{}|PaperService.delete|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
+            log.error("{}|MessageService.delete|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
             return ResponseDto.builder()
                     .result(AppUtil.RESULT_FAIL)
                     .description(e.getMessage())
@@ -183,5 +183,5 @@ public class MessageService {
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
                 .build();
-    }*/
+    }
 }
