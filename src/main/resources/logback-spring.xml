@@ -5,8 +5,8 @@
 
     <property name="CONSOLE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %magenta([%thread]) %highlight([%-3level]) %logger{5} - %msg %n" />
     <property name="ROLLING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{5} - %msg %n" />
-    <property name="FILE_NAME" value="/manito-server-log/manito-server.log" />
-    <property name="LOG_NAME_PATTERN" value="/manito-server-log/manito-server-%d{yyyy-MM-dd}.log" />
+    <property name="FILE_NAME" value="/Users/kimjunyoung/github/manito-server-log/manito-server.log" />
+    <property name="LOG_NAME_PATTERN" value="/Users/kimjunyoung/github/manito-server-log/manito-server-%d{yyyy-MM-dd}.log" />
     <property name="MAX_FILE_SIZE" value="10MB" />
     <property name="TOTAL_SIZE" value="30MB" />
     <property name="MAX_HISTORY" value="30" />
