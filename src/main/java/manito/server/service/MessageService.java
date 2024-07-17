@@ -101,15 +101,12 @@ public class MessageService {
     }
 
     public ResponseDto<?> read(RequestHeaderDto requestHeader, Long paperId) {
-        log.info("{}|MessageService.read|requestBody: {}", SecurityUtil.getCurrentUserId(), paperId);
+        log.info("MessageService.read|requestBody: {}", paperId);
         List<MessageDto> messageDtoList = new ArrayList<>();
 
         try {
-            User user = userService.getUser(SecurityUtil.getCurrentUserId());
             Optional<Paper> optionalPaper = paperRepository.findById(paperId);
-            if (optionalPaper.isEmpty())
-                throw new RuntimeException();
-            Paper paper = optionalPaper.get();
+            Paper paper = optionalPaper.orElseGet(null);
 
             List<Message> messageList = messageRepository.findByPaper(paper);
             for (Message message : messageList) {
@@ -129,7 +126,7 @@ public class MessageService {
                 messageDtoList.add(messageDto);
             }
         } catch (Exception e) {
-            log.error("{}|MessageService.read|requsetBody = {}|error = {}", SecurityUtil.getCurrentUserId(), paperId, e.getMessage(), e);
+            log.error("MessageService.read|requsetBody = {}|error = {}", paperId, e.getMessage(), e);
             return ResponseDto.builder()
                     .result(AppUtil.RESULT_FAIL)
                     .description(e.getMessage())
