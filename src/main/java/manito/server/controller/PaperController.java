@@ -28,9 +28,14 @@ public class PaperController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<?> getPapers(HttpServletRequest request, @PathVariable("userId") Long userid) {
         return new ResponseEntity<>(paperService.readList(HttpServletUtil.getRequestHeaderDto(request), userid), HttpStatus.OK);
+    }
+
+    @GetMapping("/id/{paperId}")
+    public ResponseEntity<?> getPaper(HttpServletRequest request, @PathVariable("paperId") Long paperId) {
+        return new ResponseEntity<>(paperService.read(HttpServletUtil.getRequestHeaderDto(request), paperId), HttpStatus.OK);
     }
 
     @PutMapping

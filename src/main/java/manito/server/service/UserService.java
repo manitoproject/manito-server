@@ -47,7 +47,6 @@ public class UserService {
     public ResponseDto getCurrentUserInfo(RequestHeaderDto requestHeader) {
         UserInfoResponseDto userInfo = new UserInfoResponseDto();
 
-        //todo: 에외처리 통일 필요
         try {
             Long userId = SecurityUtil.getCurrentUserId();
 
