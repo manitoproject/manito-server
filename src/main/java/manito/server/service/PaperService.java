@@ -85,6 +85,46 @@ public class PaperService {
                 .build();
     }
 
+    /**
+     * 롤링페이퍼 조회(롤링페이퍼ID별)
+     * @param requestHeader
+     * @param paperId
+     * @return
+     */
+    public ResponseDto<?> read(RequestHeaderDto requestHeader, Long paperId) {
+        log.info("PaperService.read");
+        PaperDto paperDto;
+
+        try {
+            Optional<Paper> optionalPaper = paperRepository.findById(paperId);
+            if (optionalPaper.isEmpty())
+                throw new NullPointerException();
+
+            Paper paper = optionalPaper.get();
+
+            paperDto = PaperDto.builder()
+                    .id(paper.getId())
+                    .userId(paper.getUser().getId())
+                    .category(paper.getCategory())
+                    .title(paper.getTitle())
+                    .theme(paper.getTheme())
+                    .regDateTime(paper.getRegDateTime())
+                    .modDateTime(paper.getModDateTime())
+                    .build();
+        } catch (Exception e) {
+            log.error("PaperService.read|error = {}", e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .data(paperDto)
+                .build();
+    }
+
     public ResponseDto<?> update(RequestHeaderDto requestHeader, PaperDto requestBody) {
         log.info("{}|PaperService.update|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
