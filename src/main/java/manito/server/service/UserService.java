@@ -1,13 +1,15 @@
 package manito.server.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.auth.SecurityUtil;
+import manito.server.dto.KakaoUserInfoResponseDto;
 import manito.server.dto.NicknameRequestDto;
 import manito.server.dto.RequestHeaderDto;
 import manito.server.dto.ResponseDto;
-import manito.server.dto.UserInfoResponseDto;
+import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.repository.UserRepository;
 import manito.server.util.AppUtil;
@@ -45,14 +47,14 @@ public class UserService {
     }
 
     public ResponseDto getCurrentUserInfo(RequestHeaderDto requestHeader) {
-        UserInfoResponseDto userInfo = new UserInfoResponseDto();
+        UserDto userDto = new UserDto();
 
         try {
             Long userId = SecurityUtil.getCurrentUserId();
 
             User user = getUser(userId);
 
-            userInfo = UserInfoResponseDto.builder()
+            userDto = UserDto.builder()
                     .id(user.getId())
                     .email(user.getEmail())
                     .nickname(user.getNickname())
@@ -68,7 +70,7 @@ public class UserService {
                     .build();
         }
 
-        return new ResponseDto<>("Success", null, userInfo);
+        return new ResponseDto<>("Success", null, userDto);
     }
 
     public ResponseDto changeNickname(RequestHeaderDto requestHeader, NicknameRequestDto requestBody) {
@@ -82,5 +84,24 @@ public class UserService {
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
                 .build();
+    }
+
+    /**
+     * 카카오 API에서 가져온 유저정보를 DB에 저장
+     */
+    public void saveUser(KakaoUserInfoResponseDto kakaoUser){
+
+//        KakaoInfoDto kakaoInfoDto = new KakaoInfoDto(userAttributesByToken);
+
+        User user = User.builder()
+                .id(kakaoUser.getId())
+                .email(kakaoUser.getKakaoAccount().getEmail())
+                .nickname(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .provider("KAKAO")
+                .regDate(LocalDateTime.now())
+                .build();
+
+        userRepository.save(user);
     }
 }
