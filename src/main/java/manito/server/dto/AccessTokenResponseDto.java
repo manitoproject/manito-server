@@ -15,12 +15,15 @@ import lombok.ToString;
 public class AccessTokenResponseDto {
     private String accessToken;
 
+    private String isNewUser;
+
     @JsonInclude(Include.NON_NULL)
     private UserDto userInfo;
 
     @Builder
-    public AccessTokenResponseDto(String accessToken, UserDto userInfo) {
+    public AccessTokenResponseDto(String accessToken, String isNewUser, UserDto userInfo) {
         this.accessToken = accessToken;
+        this.isNewUser = isNewUser;
         this.userInfo = userInfo;
     }
 }

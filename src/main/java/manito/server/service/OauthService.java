@@ -35,26 +35,40 @@ public class OauthService {
 
         User user = userService.getUser(kakoUserId);
 
-        String accessToken = getTokens(user.getId(), response);
+        UserDto userDto = new UserDto();
+
+        String accessToken = getTokens(kakoUserId, response);
         AccessTokenResponseDto accessTokenResponse = new AccessTokenResponseDto();
         if (user == null) {
+            userDto = UserDto.builder()
+                    .id(kakaoUser.getId())
+                    .email(kakaoUser.getKakaoAccount().getEmail())
+//                    .nickname(user.getNickname())
+                    .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                    .provider("KAKAO")
+//                    .regDate(user.getRegDate())
+                    .build();
+
             accessTokenResponse = AccessTokenResponseDto.builder()
                     .accessToken(accessToken)
+                    .isNewUser("Y")
+                    .userInfo(userDto)
                     .build();
             return new ResponseDto<>("Success", null, accessTokenResponse);
         }
 
-        UserDto userDto = UserDto.builder()
-                .id(kakaoUser.getId())
-                .email(kakaoUser.getKakaoAccount().getEmail())
+        userDto = UserDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
                 .nickname(user.getNickname())
-                .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .originName(user.getOriginName())
                 .provider("KAKAO")
                 .regDate(user.getRegDate())
                 .build();
 
         accessTokenResponse = AccessTokenResponseDto.builder()
                 .accessToken(accessToken)
+                .isNewUser("N")
                 .userInfo(userDto)
                 .build();
 
