@@ -33,6 +33,8 @@ public class SecurityConfig {
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/login/oauth/test/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable()) // 로그인 폼 미사용
@@ -50,6 +52,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // 아래 url은 filter 에서 제외
-        return web -> web.ignoring().requestMatchers("/login/**", "/token/refresh", "/paper/id/**", "/message/paper/**", "/images/**", "/", "/favicon.ico");
+        return web -> web.ignoring().requestMatchers("/login/**", "/token/refresh", "/paper/id/**", "/message/paper/**", "/images/**", "/", "/favicon.ico", "/login/oauth/test/**",
+                "/error");
     }
 }

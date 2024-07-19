@@ -1,12 +1,10 @@
 package manito.server.service;
 
 import io.netty.handler.codec.http.HttpHeaderValues;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.dto.KakaoTokenResponseDto;
 import manito.server.dto.KakaoUserInfoResponseDto;
-import manito.server.entity.User;
 import manito.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -85,30 +83,5 @@ public class KakaoOauthService {
 //        log.info("[ Kakao Service ] ProfileImageUrl ---> {} ", userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
 
         return userInfo;
-    }
-
-    /**
-     * 카카오 API에서 가져온 유저정보를 DB에 저장
-     * @param code
-     * @return
-     */
-    public User saveUser(String code){
-        String token = getKakaoToken(code);
-        KakaoUserInfoResponseDto kakaoUser = getKakaoUserInfo(token);
-
-//        KakaoInfoDto kakaoInfoDto = new KakaoInfoDto(userAttributesByToken);
-
-        User user = User.builder()
-                .id(kakaoUser.getId())
-                .email(kakaoUser.getKakaoAccount().getEmail())
-                .nickname(kakaoUser.getKakaoAccount().getProfile().getNickName())
-                .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
-                .provider("KAKAO")
-                .regDate(LocalDateTime.now())
-                .build();
-
-        userRepository.save(user);
-
-        return user;
     }
 }

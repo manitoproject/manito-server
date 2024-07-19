@@ -1,5 +1,7 @@
 package manito.server.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,21 +11,27 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class UserInfoResponseDto {
+public class UserDto {
+    @JsonInclude(Include.NON_NULL)
     private Long id;
 
+    @JsonInclude(Include.NON_NULL)
     private String email;
 
+    @JsonInclude(Include.NON_NULL)
     private String nickname;
 
+    @JsonInclude(Include.NON_NULL)
     private String originName;
 
+    @JsonInclude(Include.NON_NULL)
     private String provider;
 
+    @JsonInclude(Include.NON_NULL)
     private LocalDateTime regDate;
 
     @Builder
-    public UserInfoResponseDto(Long id, String email, String nickname, String originName, String provider, LocalDateTime regDate) {
+    public UserDto(Long id, String email, String nickname, String originName, String provider, LocalDateTime regDate) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;

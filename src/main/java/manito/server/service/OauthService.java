@@ -3,9 +3,12 @@ package manito.server.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import manito.server.dto.AccessTokenRequestDto;
 import manito.server.dto.AccessTokenResponseDto;
+import manito.server.dto.KakaoUserInfoResponseDto;
 import manito.server.dto.ResponseDto;
+import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class OauthService {
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
@@ -21,20 +25,42 @@ public class OauthService {
 
     //카카오 로그인
     public ResponseDto<AccessTokenResponseDto> loginWithKakao(HttpServletResponse response, AccessTokenRequestDto requestBody) {
-        System.out.println("<<< OauthService>> code = " + requestBody.getCode());
+        log.info("OauthService.loginWithKakao|requestBody = {}", requestBody);
 
         String code = requestBody.getCode();
+        String token = kakaoOauthService.getKakaoToken(code);
 
-        System.out.println("<<< OauthService >>> accessToken = " + code);
-        User user = kakaoOauthService.saveUser(code);
+        KakaoUserInfoResponseDto kakaoUser = kakaoOauthService.getKakaoUserInfo(token);
+        Long kakoUserId = kakaoUser.getId();
 
-        String token = getTokens(user.getId(), response);
+        User user = userService.getUser(kakoUserId);
 
-        AccessTokenResponseDto accessToken = AccessTokenResponseDto.builder()
-                .accessToken(token)
+        String accessToken = getTokens(user.getId(), response);
+        AccessTokenResponseDto accessTokenResponse = new AccessTokenResponseDto();
+        if (user == null) {
+            accessTokenResponse = AccessTokenResponseDto.builder()
+                    .accessToken(accessToken)
+                    .build();
+            return new ResponseDto<>("Success", null, accessTokenResponse);
+        }
+
+        UserDto userDto = UserDto.builder()
+                .id(kakaoUser.getId())
+                .email(kakaoUser.getKakaoAccount().getEmail())
+                .nickname(user.getNickname())
+                .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .provider("KAKAO")
+                .regDate(user.getRegDate())
                 .build();
 
-        return new ResponseDto<>("Success", null, accessToken);
+        accessTokenResponse = AccessTokenResponseDto.builder()
+                .accessToken(accessToken)
+                .userInfo(userDto)
+                .build();
+
+        userService.saveUser(kakaoUser);
+
+        return new ResponseDto<>("Success", null, accessTokenResponse);
     }
 
     //액세스토큰, 리프레시토큰 생성
