@@ -20,4 +20,10 @@ public class ResponseDto <T> {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
+
+    @Builder
+    public ResponseDto(String result, String description) {
+        this.result = result;
+        this.description = description;
+    }
 }
