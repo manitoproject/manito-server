@@ -2,6 +2,7 @@ package manito.server.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.dto.AccessTokenRequestDto;
@@ -12,6 +13,7 @@ import manito.server.dto.UserDto;
 import manito.server.entity.User;
 import manito.server.exception.CustomException;
 import manito.server.exception.ErrorCode;
+import manito.server.repository.UserRepository;
 import manito.server.util.AppUtil;
 import manito.server.util.HttpServletUtil;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class OauthService {
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
     private final KakaoOauthService kakaoOauthService;
+    private final UserRepository userRepository;
 
     //카카오 로그인
     public ResponseDto<?> loginWithKakao(HttpServletResponse response, AccessTokenRequestDto requestBody) {
@@ -36,13 +39,14 @@ public class OauthService {
         KakaoUserInfoResponseDto kakaoUser = kakaoOauthService.getKakaoUserInfo(token);
         Long kakoUserId = kakaoUser.getId();
 
-        User user = userService.getUser(kakoUserId);
-
         UserDto userDto;
+        String accessToken;
 
-        String accessToken = getTokens(kakoUserId, response);
+        Optional<User> optionalUser = userRepository.findById(kakoUserId);
+        if (optionalUser.isEmpty()) {
+            userService.saveUser(kakaoUser);
+            accessToken = getTokens(kakoUserId, response);
 
-        if (user == null) {
             userDto = UserDto.builder()
                     .id(kakaoUser.getId())
                     .email(kakaoUser.getKakaoAccount().getEmail())
@@ -58,13 +62,14 @@ public class OauthService {
                     .userInfo(userDto)
                     .build();
 
-            userService.saveUser(kakaoUser);
             return ResponseDto.builder()
                     .result(AppUtil.RESULT_SUCCESS)
                     .data(accessTokenResponse)
                     .build();
         }
 
+        User user = optionalUser.get();
+        accessToken = getTokens(kakoUserId, response);
         userDto = UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
