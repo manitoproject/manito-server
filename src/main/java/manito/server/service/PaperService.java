@@ -25,6 +25,7 @@ public class PaperService {
 
     public ResponseDto<?> create(RequestHeaderDto requestHeader, PaperDto requestBody) {
         log.info("{}|PaperService.create|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
+        PaperDto paperDto = new PaperDto();
 
         try {
             User user = userService.getUser(SecurityUtil.getCurrentUserId());
@@ -39,6 +40,10 @@ public class PaperService {
 
             paperRepository.saveAndFlush(paper);
 
+            Paper savedPaper = paperRepository.findTopByUserOrderById(user);
+            paperDto = PaperDto.builder()
+                    .id(savedPaper.getId())
+                    .build();
         } catch (Exception e) {
             log.error("{}|PaperService.create|error = {}", SecurityUtil.getCurrentUserId(), e.getMessage(), e);
             return ResponseDto.builder()
@@ -49,6 +54,7 @@ public class PaperService {
 
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
+                .data(paperDto)
                 .build();
     }
 
