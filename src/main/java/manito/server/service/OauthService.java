@@ -52,6 +52,7 @@ public class OauthService {
                     .email(kakaoUser.getKakaoAccount().getEmail())
 //                    .nickname(user.getNickname())
                     .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                    .profileImage(kakaoUser.getKakaoAccount().getProfile().getProfileImageUrl())
                     .provider("KAKAO")
 //                    .regDate(user.getRegDate())
                     .build();
@@ -68,13 +69,16 @@ public class OauthService {
                     .build();
         }
 
-        User user = optionalUser.get();
-        accessToken = getTokens(kakoUserId, response);
+        userService.saveUser(kakaoUser);
+        User user = userRepository.findById(kakoUserId).get();
+
+        accessToken = getTokens(user.getId(), response);
         userDto = UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .originName(user.getOriginName())
+                .profileImage(user.getProfileImage())
                 .provider("KAKAO")
                 .regDate(user.getRegDate())
                 .build();
