@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface PaperRepository extends JpaRepository<Paper, Long> {
     List<Paper> findByUser(User user);
 
-    Paper findTopByUserOrderById(User user);
+    Paper findTopByUserOrderByIdDesc(User user);
 }
