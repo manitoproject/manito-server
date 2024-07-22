@@ -15,6 +15,7 @@ import lombok.ToString;
 public class AccessTokenResponseDto {
     private String accessToken;
 
+    @JsonInclude(Include.NON_NULL)
     private String isNewUser;
 
     @JsonInclude(Include.NON_NULL)

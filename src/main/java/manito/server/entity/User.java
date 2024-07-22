@@ -28,6 +28,8 @@ public class User {
 
     private String originName;
 
+    private String profileImage;
+
     private String provider;
 
     private String refreshToken;

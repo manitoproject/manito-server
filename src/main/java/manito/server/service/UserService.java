@@ -59,6 +59,7 @@ public class UserService {
                     .email(user.getEmail())
                     .nickname(user.getNickname())
                     .originName(user.getOriginName())
+                    .profileImage(user.getProfileImage())
                     .provider(user.getProvider())
                     .regDate(user.getRegDate())
                     .build();
@@ -98,6 +99,7 @@ public class UserService {
                 .email(kakaoUser.getKakaoAccount().getEmail())
                 .nickname(kakaoUser.getKakaoAccount().getProfile().getNickName())
                 .originName(kakaoUser.getKakaoAccount().getProfile().getNickName())
+                .profileImage(kakaoUser.getKakaoAccount().getProfile().getProfileImageUrl())
                 .provider("KAKAO")
                 .regDate(LocalDateTime.now())
                 .build();

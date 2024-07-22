@@ -24,6 +24,8 @@ public class UserDto {
     @JsonInclude(Include.NON_NULL)
     private String originName;
 
+    private String profileImage;
+
     @JsonInclude(Include.NON_NULL)
     private String provider;
 
@@ -31,11 +33,12 @@ public class UserDto {
     private LocalDateTime regDate;
 
     @Builder
-    public UserDto(Long id, String email, String nickname, String originName, String provider, LocalDateTime regDate) {
+    public UserDto(Long id, String email, String nickname, String originName, String profileImage, String provider, LocalDateTime regDate) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.originName = originName;
+        this.profileImage = profileImage;
         this.provider = provider;
         this.regDate = regDate;
     }
