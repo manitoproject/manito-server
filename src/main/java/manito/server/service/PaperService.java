@@ -40,7 +40,7 @@ public class PaperService {
 
             paperRepository.saveAndFlush(paper);
 
-            Paper savedPaper = paperRepository.findTopByUserOrderById(user);
+            Paper savedPaper = paperRepository.findTopByUserOrderByIdDesc(user);
             paperDto = PaperDto.builder()
                     .id(savedPaper.getId())
                     .build();
