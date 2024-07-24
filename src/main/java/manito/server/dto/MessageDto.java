@@ -2,6 +2,7 @@ package manito.server.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import manito.server.entity.User;
 
 @Getter
 @Setter
@@ -16,13 +18,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-@JsonInclude(Include.NON_NULL)
 public class MessageDto {
     private Long id;
 
     private Long paperId;
 
-    private Long userId;
+    private User user;
 
     private String theme;
 
@@ -30,6 +31,7 @@ public class MessageDto {
 
     private LocalDateTime regDateTime;
 
+    @JsonInclude(Include.NON_NULL)
     private LocalDateTime modDateTime;
 
     private String font;
@@ -37,4 +39,6 @@ public class MessageDto {
     private String fontColor;
 
     private String isPublic;
+
+    private Integer position;
 }

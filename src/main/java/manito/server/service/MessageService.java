@@ -45,6 +45,7 @@ public class MessageService {
                     .font(requestBody.getFont())
                     .fontColor(requestBody.getFontColor())
                     .isPublic(requestBody.getIsPublic())
+                    .position(requestBody.getPosition())
                     .build();
 
             messageRepository.saveAndFlush(message);
@@ -74,7 +75,7 @@ public class MessageService {
                 MessageDto messageDto = MessageDto.builder()
                         .id(message.getId())
                         .paperId(message.getPaper().getId())
-                        .userId(message.getUser().getId())
+                        .user(message.getUser())
                         .theme(message.getTheme())
                         .content(message.getContent())
                         .regDateTime(message.getRegDateTime())
@@ -82,6 +83,7 @@ public class MessageService {
                         .font(message.getFont())
                         .fontColor(message.getFontColor())
                         .isPublic(message.getIsPublic())
+                        .position(message.getPosition())
                         .build();
 
                 messageDtoList.add(messageDto);
@@ -110,18 +112,39 @@ public class MessageService {
 
             List<Message> messageList = messageRepository.findByPaper(paper);
             for (Message message : messageList) {
-                MessageDto messageDto = MessageDto.builder()
-                        .id(message.getId())
-                        .paperId(message.getPaper().getId())
-                        .userId(message.getUser().getId())
-                        .theme(message.getTheme())
-                        .content(message.getContent())
-                        .regDateTime(message.getRegDateTime())
-                        .modDateTime(message.getModDateTime())
-                        .font(message.getFont())
-                        .fontColor(message.getFontColor())
-                        .isPublic(message.getIsPublic())
-                        .build();
+                MessageDto messageDto = new MessageDto();
+
+                if (message.getIsPublic().equals("Y")) {
+                    messageDto = MessageDto.builder()
+                            .id(message.getId())
+                            .paperId(message.getPaper().getId())
+                            .user(message.getUser())
+                            .theme(message.getTheme())
+                            .content(message.getContent())
+                            .regDateTime(message.getRegDateTime())
+                            .modDateTime(message.getModDateTime())
+                            .font(message.getFont())
+                            .fontColor(message.getFontColor())
+                            .isPublic(message.getIsPublic())
+                            .position(message.getPosition())
+                            .build();
+                }
+
+                if (message.getIsPublic().equals("N")) {
+                    messageDto = MessageDto.builder()
+                            .id(message.getId())
+                            .paperId(message.getPaper().getId())
+//                            .user(message.getUser())
+                            .theme(message.getTheme())
+                            .content(message.getContent())
+                            .regDateTime(message.getRegDateTime())
+                            .modDateTime(message.getModDateTime())
+                            .font(message.getFont())
+                            .fontColor(message.getFontColor())
+                            .isPublic(message.getIsPublic())
+                            .position(message.getPosition())
+                            .build();
+                }
 
                 messageDtoList.add(messageDto);
             }
@@ -148,7 +171,7 @@ public class MessageService {
                 throw new NullPointerException();
             Message message = optionalMessage.get();
 
-            message.update(requestBody.getTheme(), requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor(), requestBody.getIsPublic());
+            message.update(requestBody.getTheme(), requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor(), requestBody.getIsPublic(), requestBody.getPosition());
 
             messageRepository.saveAndFlush(message);
         } catch (Exception e) {
