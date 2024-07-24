@@ -75,7 +75,7 @@ public class MessageService {
                 MessageDto messageDto = MessageDto.builder()
                         .id(message.getId())
                         .paperId(message.getPaper().getId())
-                        .userId(message.getUser().getId())
+                        .user(message.getUser())
                         .theme(message.getTheme())
                         .content(message.getContent())
                         .regDateTime(message.getRegDateTime())
@@ -112,19 +112,39 @@ public class MessageService {
 
             List<Message> messageList = messageRepository.findByPaper(paper);
             for (Message message : messageList) {
-                MessageDto messageDto = MessageDto.builder()
-                        .id(message.getId())
-                        .paperId(message.getPaper().getId())
-                        .userId(message.getUser().getId())
-                        .theme(message.getTheme())
-                        .content(message.getContent())
-                        .regDateTime(message.getRegDateTime())
-                        .modDateTime(message.getModDateTime())
-                        .font(message.getFont())
-                        .fontColor(message.getFontColor())
-                        .isPublic(message.getIsPublic())
-                        .position(message.getPosition())
-                        .build();
+                MessageDto messageDto = new MessageDto();
+
+                if (message.getIsPublic().equals("Y")) {
+                    messageDto = MessageDto.builder()
+                            .id(message.getId())
+                            .paperId(message.getPaper().getId())
+                            .user(message.getUser())
+                            .theme(message.getTheme())
+                            .content(message.getContent())
+                            .regDateTime(message.getRegDateTime())
+                            .modDateTime(message.getModDateTime())
+                            .font(message.getFont())
+                            .fontColor(message.getFontColor())
+                            .isPublic(message.getIsPublic())
+                            .position(message.getPosition())
+                            .build();
+                }
+
+                if (message.getIsPublic().equals("N")) {
+                    messageDto = MessageDto.builder()
+                            .id(message.getId())
+                            .paperId(message.getPaper().getId())
+//                            .user(message.getUser())
+                            .theme(message.getTheme())
+                            .content(message.getContent())
+                            .regDateTime(message.getRegDateTime())
+                            .modDateTime(message.getModDateTime())
+                            .font(message.getFont())
+                            .fontColor(message.getFontColor())
+                            .isPublic(message.getIsPublic())
+                            .position(message.getPosition())
+                            .build();
+                }
 
                 messageDtoList.add(messageDto);
             }
