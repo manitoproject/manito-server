@@ -1,5 +1,6 @@
 package manito.server.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,10 +31,13 @@ public class Message {
     @ManyToOne
     private User user;
 
+    @Column(nullable = false)
     private String theme;
 
+    @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private LocalDateTime regDateTime;
 
     private LocalDateTime modDateTime;
@@ -42,15 +46,20 @@ public class Message {
 
     private String fontColor;
 
+    @Column(nullable = false)
     @ColumnDefault("'Y'")
     private String isPublic;
 
-    public void update(String theme, String content, LocalDateTime modDateTime, String font, String fontColor, String isPublic) {
+    @Column(nullable = false)
+    private Integer position;
+
+    public void update(String theme, String content, LocalDateTime modDateTime, String font, String fontColor, String isPublic, Integer position) {
         this.theme = theme;
         this.content = content;
         this.modDateTime = modDateTime;
         this.font = font;
         this.fontColor = fontColor;
         this.isPublic = isPublic;
+        this.position = position;
     }
 }

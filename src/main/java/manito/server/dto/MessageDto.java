@@ -2,6 +2,7 @@ package manito.server.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,4 +38,6 @@ public class MessageDto {
     private String fontColor;
 
     private String isPublic;
+
+    private Integer position;
 }

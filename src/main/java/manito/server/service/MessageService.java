@@ -45,6 +45,7 @@ public class MessageService {
                     .font(requestBody.getFont())
                     .fontColor(requestBody.getFontColor())
                     .isPublic(requestBody.getIsPublic())
+                    .position(requestBody.getPosition())
                     .build();
 
             messageRepository.saveAndFlush(message);
@@ -82,6 +83,7 @@ public class MessageService {
                         .font(message.getFont())
                         .fontColor(message.getFontColor())
                         .isPublic(message.getIsPublic())
+                        .position(message.getPosition())
                         .build();
 
                 messageDtoList.add(messageDto);
@@ -121,6 +123,7 @@ public class MessageService {
                         .font(message.getFont())
                         .fontColor(message.getFontColor())
                         .isPublic(message.getIsPublic())
+                        .position(message.getPosition())
                         .build();
 
                 messageDtoList.add(messageDto);
@@ -148,7 +151,7 @@ public class MessageService {
                 throw new NullPointerException();
             Message message = optionalMessage.get();
 
-            message.update(requestBody.getTheme(), requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor(), requestBody.getIsPublic());
+            message.update(requestBody.getTheme(), requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor(), requestBody.getIsPublic(), requestBody.getPosition());
 
             messageRepository.saveAndFlush(message);
         } catch (Exception e) {
