@@ -3,6 +3,7 @@ package manito.server.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import manito.server.dto.NicknameRequestDto;
+import manito.server.dto.UserDto;
 import manito.server.service.UserService;
 import manito.server.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,12 @@ public class UserController {
     }
 
     @PostMapping("/nickname")
-    public ResponseEntity<?> nickname(HttpServletRequest request, @RequestBody NicknameRequestDto requestBody) {
+    public ResponseEntity<?> nickname(HttpServletRequest request, @RequestBody UserDto requestBody) {
         return new ResponseEntity<>(userService.changeNickname(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<?> profile(HttpServletRequest request, @RequestBody UserDto requestBody) {
+        return new ResponseEntity<>(userService.changeProfile(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
     }
 }

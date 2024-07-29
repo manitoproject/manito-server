@@ -74,11 +74,24 @@ public class UserService {
         return new ResponseDto<>("Success", null, userDto);
     }
 
-    public ResponseDto changeNickname(RequestHeaderDto requestHeader, NicknameRequestDto requestBody) {
+    public ResponseDto changeNickname(RequestHeaderDto requestHeader, UserDto requestBody) {
         Long userId = SecurityUtil.getCurrentUserId();
         User user = getUser(userId);
 
         user.updateNickname(requestBody.getNickname());
+
+        userRepository.saveAndFlush(user);
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .build();
+    }
+
+    public ResponseDto changeProfile(RequestHeaderDto requestHeader, UserDto requestBody) {
+        Long userId = SecurityUtil.getCurrentUserId();
+        User user = getUser(userId);
+
+        user.updateIsOriginProfile(requestBody.getIsOriginProfile());
 
         userRepository.saveAndFlush(user);
 
