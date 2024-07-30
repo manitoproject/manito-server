@@ -40,5 +40,7 @@ public class MessageDto {
 
     private String isPublic;
 
+    private String anonymous;
+
     private Integer position;
 }
