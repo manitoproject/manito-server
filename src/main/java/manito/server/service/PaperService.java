@@ -141,7 +141,7 @@ public class PaperService {
 
             Paper paper = optionalPaper.get();
 
-            paper.update(requestBody.getCategory(), requestBody.getTitle(), requestBody.getTheme(), LocalDateTime.now());
+            paper.update(requestBody.getTitle(), LocalDateTime.now());
 
             paperRepository.saveAndFlush(paper);
         } catch (Exception e) {

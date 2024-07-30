@@ -49,10 +49,8 @@ public class Paper {
     @OneToMany(mappedBy = "paper", cascade = CascadeType.REMOVE)
     private List<Message> messageList;
 
-    public void update(String category, String title, String theme, LocalDateTime nowDateTime) {
-        this.category = category;
+    public void update(String title, LocalDateTime nowDateTime) {
         this.title = title;
-        this.theme = theme;
         this.modDateTime = nowDateTime;
     }
 }
