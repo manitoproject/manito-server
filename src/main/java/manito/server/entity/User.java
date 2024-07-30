@@ -37,11 +37,17 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime regDate;
 
+    private String isOriginProfile;
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateIsOriginProfile(String isOriginProfile) {
+        this.isOriginProfile = isOriginProfile;
     }
 }
