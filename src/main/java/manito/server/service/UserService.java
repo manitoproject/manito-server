@@ -62,6 +62,7 @@ public class UserService {
                     .profileImage(user.getProfileImage())
                     .provider(user.getProvider())
                     .regDate(user.getRegDate())
+                    .isOriginProfile(user.getIsOriginProfile())
                     .build();
         } catch (Exception e) {
             log.error("{}|UserService.getCurrentUserInfo|error = {}", requestHeader.getAuthorization(), e.getMessage(), e);
