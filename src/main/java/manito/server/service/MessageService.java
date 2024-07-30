@@ -30,6 +30,12 @@ public class MessageService {
         log.info("{}|MessageService.create|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
         try {
+            if (requestBody.getIsPublic().equals("N") && requestBody.getAnonymous() == null)
+                return ResponseDto.builder()
+                        .result(AppUtil.RESULT_FAIL)
+                        .description(AppUtil.ANONYMOUS_IS_NULL)
+                        .build();
+
             User user = userService.getUser(SecurityUtil.getCurrentUserId());
             Optional<Paper> optionalPaper = paperRepository.findById(requestBody.getPaperId());
             if (optionalPaper.isEmpty())
@@ -45,6 +51,7 @@ public class MessageService {
                     .font(requestBody.getFont())
                     .fontColor(requestBody.getFontColor())
                     .isPublic(requestBody.getIsPublic())
+                    .anonymous(requestBody.getAnonymous())
                     .position(requestBody.getPosition())
                     .build();
 
@@ -83,6 +90,7 @@ public class MessageService {
                         .font(message.getFont())
                         .fontColor(message.getFontColor())
                         .isPublic(message.getIsPublic())
+                        .anonymous(message.getAnonymous())
                         .position(message.getPosition())
                         .build();
 
@@ -126,6 +134,7 @@ public class MessageService {
                             .font(message.getFont())
                             .fontColor(message.getFontColor())
                             .isPublic(message.getIsPublic())
+//                            .anonymous(message.getAnonymous())
                             .position(message.getPosition())
                             .build();
                 }
@@ -142,6 +151,7 @@ public class MessageService {
                             .font(message.getFont())
                             .fontColor(message.getFontColor())
                             .isPublic(message.getIsPublic())
+                            .anonymous(message.getAnonymous())
                             .position(message.getPosition())
                             .build();
                 }
@@ -166,12 +176,18 @@ public class MessageService {
         log.info("{}|MessageService.update|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
         try {
+            if (requestBody.getIsPublic().equals("N") && requestBody.getAnonymous() == null)
+                return ResponseDto.builder()
+                        .result(AppUtil.RESULT_FAIL)
+                        .description(AppUtil.ANONYMOUS_IS_NULL)
+                        .build();
+
             Optional<Message> optionalMessage = messageRepository.findById(requestBody.getId());
             if (optionalMessage.isEmpty())
                 throw new NullPointerException();
             Message message = optionalMessage.get();
 
-            message.update(requestBody.getTheme(), requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor(), requestBody.getIsPublic(), requestBody.getPosition());
+            message.update(requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor());
 
             messageRepository.saveAndFlush(message);
         } catch (Exception e) {

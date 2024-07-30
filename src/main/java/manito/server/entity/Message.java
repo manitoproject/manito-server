@@ -50,16 +50,15 @@ public class Message {
     @ColumnDefault("'Y'")
     private String isPublic;
 
+    private String anonymous;
+
     @Column(nullable = false)
     private Integer position;
 
-    public void update(String theme, String content, LocalDateTime modDateTime, String font, String fontColor, String isPublic, Integer position) {
-        this.theme = theme;
+    public void update(String content, LocalDateTime modDateTime, String font, String fontColor) {
         this.content = content;
         this.modDateTime = modDateTime;
         this.font = font;
         this.fontColor = fontColor;
-        this.isPublic = isPublic;
-        this.position = position;
     }
 }
