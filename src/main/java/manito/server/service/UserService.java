@@ -1,12 +1,15 @@
 package manito.server.service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.auth.SecurityUtil;
 import manito.server.dto.KakaoUserInfoResponseDto;
-import manito.server.dto.NicknameRequestDto;
 import manito.server.dto.RequestHeaderDto;
 import manito.server.dto.ResponseDto;
 import manito.server.dto.UserDto;
@@ -105,7 +108,6 @@ public class UserService {
      * 카카오 API에서 가져온 유저정보를 DB에 저장
      */
     public void saveUser(KakaoUserInfoResponseDto kakaoUser){
-
 //        KakaoInfoDto kakaoInfoDto = new KakaoInfoDto(userAttributesByToken);
 
         User user = User.builder()
@@ -119,5 +121,32 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public ResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Optional<Cookie> refreshTokenCookie = Arrays.stream(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals("refreshToken")).findFirst();
+
+            if (refreshTokenCookie.isPresent()) {
+                refreshTokenCookie.get().setMaxAge(0);
+                response.addCookie(refreshTokenCookie.get());
+            } // refreshTokenCookie 삭제. HttpOnly여서 서버에서 삭제
+
+            Long userId = SecurityUtil.getCurrentUserId();
+            User user = getUser(userId);
+            user.deleteRefreshToken();
+            userRepository.saveAndFlush(user);
+
+        } catch (Exception e) {
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(AppUtil.LOGOUT_FAILED)
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .build();
     }
 }

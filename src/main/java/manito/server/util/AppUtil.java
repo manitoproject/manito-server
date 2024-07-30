@@ -5,4 +5,5 @@ public class AppUtil {
     public static final String RESULT_FAIL = "Fail";
 
     public static final String ANONYMOUS_IS_NULL = "Anonymous is null";
+    public static final String LOGOUT_FAILED = "Logout failed";
 }
