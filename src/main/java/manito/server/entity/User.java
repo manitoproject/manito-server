@@ -50,4 +50,8 @@ public class User {
     public void updateIsOriginProfile(String isOriginProfile) {
         this.isOriginProfile = isOriginProfile;
     }
+
+    public void deleteRefreshToken() {
+        this.refreshToken = null;
+    }
 }

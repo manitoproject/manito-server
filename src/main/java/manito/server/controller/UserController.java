@@ -1,13 +1,14 @@
 package manito.server.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import manito.server.dto.NicknameRequestDto;
 import manito.server.dto.UserDto;
 import manito.server.service.UserService;
 import manito.server.util.HttpServletUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +37,10 @@ public class UserController {
     @PostMapping("/profile")
     public ResponseEntity<?> profile(HttpServletRequest request, @RequestBody UserDto requestBody) {
         return new ResponseEntity<>(userService.changeProfile(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        return new ResponseEntity<>(userService.logout(request, response), HttpStatus.OK);
     }
 }
