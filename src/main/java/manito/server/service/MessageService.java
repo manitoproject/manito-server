@@ -187,7 +187,7 @@ public class MessageService {
                 throw new NullPointerException();
             Message message = optionalMessage.get();
 
-            message.update(requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor(), requestBody.getIsPublic(), requestBody.getAnonymous(), requestBody.getPosition());
+            message.update(requestBody.getContent(), LocalDateTime.now(), requestBody.getFont(), requestBody.getFontColor());
 
             messageRepository.saveAndFlush(message);
         } catch (Exception e) {
