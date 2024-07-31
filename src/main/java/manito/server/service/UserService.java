@@ -107,9 +107,7 @@ public class UserService {
     /**
      * 카카오 API에서 가져온 유저정보를 DB에 저장
      */
-    public void saveUser(KakaoUserInfoResponseDto kakaoUser){
-//        KakaoInfoDto kakaoInfoDto = new KakaoInfoDto(userAttributesByToken);
-
+    public void saveNewUser(KakaoUserInfoResponseDto kakaoUser){
         User user = User.builder()
                 .id(kakaoUser.getId())
                 .email(kakaoUser.getKakaoAccount().getEmail())
@@ -120,7 +118,16 @@ public class UserService {
                 .regDate(LocalDateTime.now())
                 .build();
 
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
+    }
+
+    public void saveOldUser(KakaoUserInfoResponseDto kakaoUser){
+        User user = userRepository.findById(kakaoUser.getId()).get();
+        user.updateOldUserInfo(kakaoUser.getKakaoAccount().getEmail(),
+                kakaoUser.getKakaoAccount().getProfile().getNickName(),
+                kakaoUser.getKakaoAccount().getProfile().getProfileImageUrl());
+
+        userRepository.saveAndFlush(user);
     }
 
     public ResponseDto<?> logout(HttpServletRequest request, HttpServletResponse response) {

@@ -44,7 +44,7 @@ public class OauthService {
 
         Optional<User> optionalUser = userRepository.findById(kakoUserId);
         if (optionalUser.isEmpty()) {
-            userService.saveUser(kakaoUser);
+            userService.saveNewUser(kakaoUser);
             accessToken = getTokens(kakoUserId, response);
 
             userDto = UserDto.builder()
@@ -69,7 +69,7 @@ public class OauthService {
                     .build();
         }
 
-        userService.saveUser(kakaoUser);
+        userService.saveOldUser(kakaoUser);
         User user = userRepository.findById(kakoUserId).get();
 
         accessToken = getTokens(user.getId(), response);

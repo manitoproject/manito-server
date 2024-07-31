@@ -54,4 +54,10 @@ public class User {
     public void deleteRefreshToken() {
         this.refreshToken = null;
     }
+
+    public void updateOldUserInfo(String email, String originName, String profileImage) {
+        this.email = email;
+        this.originName = originName;
+        this.profileImage = profileImage;
+    }
 }

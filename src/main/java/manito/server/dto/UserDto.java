@@ -32,6 +32,7 @@ public class UserDto {
     @JsonInclude(Include.NON_NULL)
     private LocalDateTime regDate;
 
+    @JsonInclude(Include.NON_NULL)
     private String isOriginProfile;
 
     @Builder
