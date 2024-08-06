@@ -132,14 +132,15 @@ public class MessageService {
             List<Message> messageList = messageRepository.findByPaper(paper);
             for (Message message : messageList) {
                 MessageDto messageDto = new MessageDto();
-                User userOnlyNickname = User.builder()
+                User userIdAndNickname = User.builder()
+                        .id(message.getUser().getId())
                         .nickname(message.getUser().getNickname())
                         .build();
                 if (message.getIsPublic().equals("Y")) {
                     messageDto = MessageDto.builder()
                             .id(message.getId())
                             .paperId(message.getPaper().getId())
-                            .user(userOnlyNickname)
+                            .user(userIdAndNickname)
                             .theme(message.getTheme())
                             .content(message.getContent())
                             .regDateTime(message.getRegDateTime())
