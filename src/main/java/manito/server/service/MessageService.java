@@ -47,7 +47,8 @@ public class MessageService {
             Optional<Message> optionalMessage = messageRepository.findByPaperAndPosition(paper, requestBody.getPosition());
             if (optionalMessage.isPresent())
                 return ResponseDto.builder()
-                        .result(AppUtil.POSITION_IS_NOT_AVAILABLE)
+                        .result(AppUtil.RESULT_FAIL)
+                        .description(AppUtil.POSITION_IS_NOT_AVAILABLE)
                         .build();
 
             User user = userService.getUser(SecurityUtil.getCurrentUserId());
