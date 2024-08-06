@@ -23,6 +23,7 @@ public class MessageDto {
 
     private Long paperId;
 
+    @JsonInclude(Include.NON_NULL)
     private User user;
 
     private String theme;

@@ -36,11 +36,21 @@ public class MessageService {
                         .description(AppUtil.ANONYMOUS_IS_NULL)
                         .build();
 
-            User user = userService.getUser(SecurityUtil.getCurrentUserId());
             Optional<Paper> optionalPaper = paperRepository.findById(requestBody.getPaperId());
             if (optionalPaper.isEmpty())
-                throw new RuntimeException();
+                return ResponseDto.builder()
+                        .result(AppUtil.RESULT_FAIL)
+                        .description(AppUtil.PAPER_IS_NULL)
+                        .build();
+
             Paper paper = optionalPaper.get();
+            Optional<Message> optionalMessage = messageRepository.findByPaperAndPosition(paper, requestBody.getPosition());
+            if (optionalMessage.isPresent())
+                return ResponseDto.builder()
+                        .result(AppUtil.POSITION_IS_NOT_AVAILABLE)
+                        .build();
+
+            User user = userService.getUser(SecurityUtil.getCurrentUserId());
 
             Message message = Message.builder()
                     .paper(paper)
@@ -121,12 +131,14 @@ public class MessageService {
             List<Message> messageList = messageRepository.findByPaper(paper);
             for (Message message : messageList) {
                 MessageDto messageDto = new MessageDto();
-
+                User userOnlyNickname = User.builder()
+                        .nickname(message.getUser().getNickname())
+                        .build();
                 if (message.getIsPublic().equals("Y")) {
                     messageDto = MessageDto.builder()
                             .id(message.getId())
                             .paperId(message.getPaper().getId())
-                            .user(message.getUser())
+                            .user(userOnlyNickname)
                             .theme(message.getTheme())
                             .content(message.getContent())
                             .regDateTime(message.getRegDateTime())
@@ -176,11 +188,12 @@ public class MessageService {
         log.info("{}|MessageService.update|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
         try {
-            if (requestBody.getIsPublic().equals("N") && requestBody.getAnonymous() == null)
+            //익명 여부는 수정불가
+            /*if (requestBody.getIsPublic().equals("N") && requestBody.getAnonymous() == null)
                 return ResponseDto.builder()
                         .result(AppUtil.RESULT_FAIL)
                         .description(AppUtil.ANONYMOUS_IS_NULL)
-                        .build();
+                        .build();*/
 
             Optional<Message> optionalMessage = messageRepository.findById(requestBody.getId());
             if (optionalMessage.isEmpty())
