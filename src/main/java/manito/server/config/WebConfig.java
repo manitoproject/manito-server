@@ -9,7 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://manito-client-git-develop-bisari31s-projects.vercel.app")
+                .allowedOrigins("https://manito-client-git-develop-bisari31s-projects.vercel.app",
+                        "https://dev.manito.my", "https://manito.my")
                 .allowedMethods("*")
                 .allowCredentials(true);
     }
