@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import manito.server.auth.SecurityUtil;
+import manito.server.dto.MessageCountDto;
 import manito.server.dto.MessageDto;
 import manito.server.dto.RequestHeaderDto;
 import manito.server.dto.ResponseDto;
@@ -121,7 +122,7 @@ public class MessageService {
                 .build();
     }
 
-    public ResponseDto<?> read(RequestHeaderDto requestHeader, Long paperId) {
+    public ResponseDto<?> readByPaper(RequestHeaderDto requestHeader, Long paperId) {
         log.info("MessageService.read|requestBody: {}", paperId);
         List<MessageDto> messageDtoList = new ArrayList<>();
 
@@ -189,6 +190,35 @@ public class MessageService {
         return ResponseDto.builder()
                 .result(AppUtil.RESULT_SUCCESS)
                 .data(messageDtoList)
+                .build();
+    }
+
+    public ResponseDto<?> countMessages(RequestHeaderDto requestHeader, Long paperId) {
+        log.info("MessageService.countMessages|requestBody: {}", paperId);
+        MessageCountDto messageCount;
+
+        try {
+            Optional<Paper> optionalPaper = paperRepository.findById(paperId);
+            Paper paper;
+            if (optionalPaper.isPresent()) paper = optionalPaper.get();
+            else throw new Exception("paper not found");
+
+            List<Message> messageList = messageRepository.findByPaper(paper);
+
+            messageCount = MessageCountDto.builder()
+                    .count(messageList.size())
+                    .build();
+        } catch (Exception e) {
+            log.error("MessageService.countMessages|error = {}", e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .data(messageCount)
                 .build();
     }
 
