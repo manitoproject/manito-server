@@ -45,7 +45,18 @@ public class MessageController {
      */
     @GetMapping("/paper/{paperId}")
     public ResponseEntity<?> read(HttpServletRequest request, @PathVariable("paperId") Long paperId) {
-        return new ResponseEntity<>(messageService.read(HttpServletUtil.getRequestHeaderDto(request), paperId), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.readByPaper(HttpServletUtil.getRequestHeaderDto(request), paperId), HttpStatus.OK);
+    }
+
+    /**
+     * 롤링페이퍼별 메세지 개수 조회
+     * @param request
+     * @param paperId
+     * @return
+     */
+    @GetMapping("/count/paper/{paperId}")
+    public ResponseEntity<?> count(HttpServletRequest request, @PathVariable("paperId") Long paperId) {
+        return new ResponseEntity<>(messageService.countMessages(HttpServletUtil.getRequestHeaderDto(request), paperId), HttpStatus.OK);
     }
 
     /**
@@ -59,6 +70,12 @@ public class MessageController {
         return new ResponseEntity<>(messageService.update(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
     }
 
+    /**
+     * 메세지 삭제
+     * @param request
+     * @param requestBody
+     * @return
+     */
     @DeleteMapping
     public ResponseEntity<?> delete(HttpServletRequest request, @RequestBody MessageDto requestBody) {
         return new ResponseEntity<>(messageService.delete(HttpServletUtil.getRequestHeaderDto(request), requestBody), HttpStatus.OK);
