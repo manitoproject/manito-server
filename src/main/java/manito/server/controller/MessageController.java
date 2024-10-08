@@ -60,6 +60,17 @@ public class MessageController {
     }
 
     /**
+     * 카테고리별 모든 메세지 조회
+     * @param request
+     * @param category
+     * @return
+     */
+    @GetMapping("/count/{category}")
+    public ResponseEntity<?> countCategory(HttpServletRequest request, @PathVariable("category") String category) {
+        return new ResponseEntity<>(messageService.countMessagesByPaperCategory(HttpServletUtil.getRequestHeaderDto(request), category), HttpStatus.OK);
+    }
+
+    /**
      * 메세지 수정
      * @param request
      * @param requestBody

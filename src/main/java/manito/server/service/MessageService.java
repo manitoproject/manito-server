@@ -222,6 +222,41 @@ public class MessageService {
                 .build();
     }
 
+    public ResponseDto<?> countMessagesByPaperCategory(RequestHeaderDto requestHeaderDto, String category) {
+        log.info("MessageService.countMessagesByCategory|requestBody: {}", category);
+        MessageCountDto messageCountDto;
+        int countSum = 0;
+        int count = 0;
+
+        try {
+            if (category.equals("rollingpaper")) category = "ROLLING_PAPER";
+            else if (category.equals("cake")) category = "CAKE";
+            else if (category.equals("treasure")) category = "TREASURE";
+            else throw new Exception("category is not valid");
+
+            List<Paper> paperList = paperRepository.findByCategory(category);
+            for (Paper paper : paperList) {
+                count = messageRepository.countByPaper(paper);
+                countSum += count;
+            }
+
+            messageCountDto = MessageCountDto.builder()
+                    .count(countSum)
+                    .build();
+        } catch (Exception e) {
+            log.error("MessageService.countMessagesByCategory|error = {}", e.getMessage(), e);
+            return ResponseDto.builder()
+                    .result(AppUtil.RESULT_FAIL)
+                    .description(e.getMessage())
+                    .build();
+        }
+
+        return ResponseDto.builder()
+                .result(AppUtil.RESULT_SUCCESS)
+                .data(messageCountDto)
+                .build();
+    }
+
     public ResponseDto<?> update(RequestHeaderDto requestHeader, MessageDto requestBody) {
         log.info("{}|MessageService.update|requestBody = {}", SecurityUtil.getCurrentUserId(), requestBody);
 
