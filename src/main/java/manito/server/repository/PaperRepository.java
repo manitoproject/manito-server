@@ -11,4 +11,6 @@ public interface PaperRepository extends JpaRepository<Paper, Long> {
     List<Paper> findByUser(User user);
 
     Paper findTopByUserOrderByIdDesc(User user);
+
+    List<Paper> findByCategory(String category);
 }
