@@ -15,4 +15,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByPaper(Paper paper);
 
     Optional<Message> findByPaperAndPosition(Paper paper, Integer position);
+
+    Integer countByPaper(Paper paper);
 }
