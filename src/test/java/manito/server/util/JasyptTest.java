@@ -14,13 +14,4 @@ public class JasyptTest {
     @Autowired
     private StringEncryptor jasyptEncryptor;
 
-    @Test
-    void custom_jasypt_test_user() {
-        String encrypted = jasyptEncryptor.encrypt("manitopemkey");
-        System.out.println("encrypted: " + encrypted);
-
-        String decrypted = jasyptEncryptor.decrypt(encrypted);
-        System.out.println("decrypted: " + decrypted);
-        Assertions.assertThat(decrypted).isEqualTo("manitopemkey");
-    }
 }
